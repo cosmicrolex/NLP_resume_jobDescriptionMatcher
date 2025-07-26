@@ -1,0 +1,39 @@
+services:
+  # Backend FastAPI service
+  - type: web
+    name: ai-job-assistant-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.0
+      - key: PORT
+        fromService:
+          type: web
+          name: ai-job-assistant-backend
+          property: port
+
+  # Frontend Streamlit service  
+  - type: web
+    name: ai-job-assistant-frontend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run frontend/streamlit_app.py --server.port $PORT --server.address 0.0.0.0
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.0
+      - key: PORT
+        fromService:
+          type: web
+          name: ai-job-assistant-frontend
+          property: port
+      - key: API_BASE_URL
+        fromService:
+          type: web
+          name: ai-job-assistant-backend
+          property: host
