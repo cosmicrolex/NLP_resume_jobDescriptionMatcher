@@ -9,12 +9,7 @@ services:
     healthCheckPath: /
     envVars:
       - key: PYTHON_VERSION
-        value: 3.13.0
-      - key: PORT
-        fromService:
-          type: web
-          name: ai-job-assistant-backend
-          property: port
+        value: 3.11.0
 
   # Frontend Streamlit service  
   - type: web
@@ -26,12 +21,7 @@ services:
     healthCheckPath: /
     envVars:
       - key: PYTHON_VERSION
-        value: 3.13.0
-      - key: PORT
-        fromService:
-          type: web
-          name: ai-job-assistant-frontend
-          property: port
+        value: 3.11.0
       - key: API_BASE_URL
         fromService:
           type: web
