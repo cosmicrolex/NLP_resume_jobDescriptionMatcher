@@ -29,6 +29,9 @@ def extract_with_ocr(file_path):
         for img in images:
             text += pytesseract.image_to_string(img)
         return text
+    except ImportError as e:
+        print(f"OCR dependencies not available: {e}")
+        return ""
     except Exception as e:
         print(f"OCR extraction failed: {e}")
         return ""
@@ -60,17 +63,13 @@ def clean_extracted_text(text):
 def extract_text_from_any_pdf(file_path):
     """
     Extract and clean text from any PDF, using pdfplumber or OCR as fallback.
-    
-    Args:
-        file_path (str): Path to the PDF file
-    
-    Returns:
-        str: Cleaned extracted text
     """
     text = extract_with_pdfplumber(file_path)
     if not text.strip():
-        print("No text found with pdfplumber. Switching to OCR...")
+        print("No text found with pdfplumber. Trying OCR...")
         text = extract_with_ocr(file_path)
+        if not text.strip():
+            print("OCR also failed. Returning empty text.")
     return clean_extracted_text(text)
 
 def save_text_to_file(text, output_path):
