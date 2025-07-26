@@ -1,7 +1,17 @@
 import os
 import sys
+import nltk
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import JSONResponse
+
+# Download required NLTK data
+try:
+    nltk.download('punkt', quiet=True)
+    nltk.download('stopwords', quiet=True)
+    nltk.download('wordnet', quiet=True)
+    nltk.download('punkt_tab', quiet=True)
+except:
+    pass
 
 # Ensure the utils and app directories are in sys.path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))

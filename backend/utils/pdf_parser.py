@@ -21,11 +21,17 @@ def extract_with_ocr(file_path):
     """
     Extract text from PDF using OCR if pdfplumber fails.
     """
-    images = convert_from_path(file_path)
-    text = ""
-    for img in images:
-        text += pytesseract.image_to_string(img)
-    return text
+    try:
+        from pdf2image import convert_from_path
+        import pytesseract
+        images = convert_from_path(file_path)
+        text = ""
+        for img in images:
+            text += pytesseract.image_to_string(img)
+        return text
+    except Exception as e:
+        print(f"OCR extraction failed: {e}")
+        return ""
 
 def clean_extracted_text(text):
     """
